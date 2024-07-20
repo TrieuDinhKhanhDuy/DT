@@ -7,8 +7,9 @@ export const createProduct = async (req, res, next) => {
             data,
             message:"Thêm sản phẩm thành công"
         })
+        next();
     } catch (error) {
-        console.log(error);
+       next(error);
     }
 }
 export const getAllProducts = async (req, res, next) => {
@@ -19,8 +20,9 @@ export const getAllProducts = async (req, res, next) => {
             data,
             message:"Danh sách sản phẩm "
         })
+        next();
     } catch (error) {
-        console.log(error);
+        next(error);
     }
 }
 export const getByIdProduct = async (req, res, next) => {
@@ -31,8 +33,9 @@ export const getByIdProduct = async (req, res, next) => {
             data,
             message:"Lấy sản phẩm thành công"
         })
+        next();
     } catch (error) {
-        console.log(error);
+           next(error);
     }
 }
 export const deleteProduct = async (req, res, next) => {
@@ -43,8 +46,9 @@ export const deleteProduct = async (req, res, next) => {
             data,
             message:"Xóa sản phẩm thành công"
         })
+        next();
     } catch (error) {
-        console.log(error);
+           next(error);
     }
 }
 export const updateProduct = async (req, res, next) => {
@@ -57,7 +61,8 @@ export const updateProduct = async (req, res, next) => {
             data,
             message:"Cập nhật sản phẩm thành công"
         })
+        next();
     } catch (error) {
-        console.log(error);
+        next(error);
     }
 }
