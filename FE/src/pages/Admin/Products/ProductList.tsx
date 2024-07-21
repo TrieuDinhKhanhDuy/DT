@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import type { GetRef, InputRef } from 'antd';
 import { Button, Form, Input, Popconfirm, Table } from 'antd';
 import { AiFillPlusCircle } from "react-icons/ai"
+import { useQuery } from '@tanstack/react-query';
+import instance from '../../../api';
 
 type FormInstance<T> = GetRef<typeof Form<T>>;
 
@@ -110,6 +112,12 @@ interface DataType {
 type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
 
 const ProductList: React.FC = () => {
+  const { data} = useQuery({
+    queryKey: ["products"],
+    queryFn: () => instance.get(`/products`),
+});
+
+
   const [dataSource, setDataSource] = useState<DataType[]>([
     {
       key: '0',
