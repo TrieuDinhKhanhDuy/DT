@@ -1,8 +1,8 @@
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { useEffect, useState } from "react";
-import instance from "../api";
-import { Product } from "../interfaces/Products";
+import instance from "../../api";
+import { Product } from "../../interfaces/Products";
 
 type Props = {};
 

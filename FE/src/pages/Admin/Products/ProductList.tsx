@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import type { GetRef, InputRef } from 'antd';
 import { Button, Form, Input, Popconfirm, Table } from 'antd';
+import { AiFillPlusCircle } from "react-icons/ai"
 
 type FormInstance<T> = GetRef<typeof Form<T>>;
 
@@ -206,9 +207,10 @@ const ProductList: React.FC = () => {
   return (
     <div>
       <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
-        Add a row
+        <AiFillPlusCircle /> Add a row
       </Button>
       <Table
+      
         components={components}
         rowClassName={() => 'editable-row'}
         bordered

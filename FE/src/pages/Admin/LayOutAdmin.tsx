@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  AppstoreAddOutlined,
     DashboardFilled,
   DesktopOutlined,
   FileOutlined,
@@ -13,6 +14,7 @@ import {
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import { NavLink, Outlet } from 'react-router-dom';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -33,14 +35,16 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem('Dashboard', '1', <DashboardFilled/>),
-  getItem('Products List', '2', <UnorderedListOutlined />),
-  getItem('Add new product', 'sub1', <ProductOutlined />),
+  getItem(<NavLink to="/admin">DashBoard</NavLink>, '1', <DashboardFilled/>),
+  getItem('Sản phẩm', '2', <ProductOutlined />, [
+    getItem(<NavLink to="/admin/products">Danh sách </NavLink>,2-1,<UnorderedListOutlined />),
+    getItem(<NavLink to="/admin/products/add">Thêm mới</NavLink>,2-2,<AppstoreAddOutlined />),
+  ]),
   getItem('Statistical', 'sub2', <PieChartOutlined  />),
   getItem('Logout', '9', <PoweroffOutlined />),
 ];
 
-const Admin: React.FC = () => {
+const LayOutAdmin: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -67,7 +71,7 @@ const Admin: React.FC = () => {
               borderRadius: borderRadiusLG,
             }}
           >
-            Bill is a cat.
+            <Outlet />
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
@@ -78,4 +82,4 @@ const Admin: React.FC = () => {
   );
 };
 
-export default Admin;
+export default LayOutAdmin;
