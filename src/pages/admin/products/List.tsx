@@ -111,106 +111,61 @@ interface DataType {
 type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
 
 const ProductList: React.FC = () => {
- 
+  const { state, removeProduct } = useContext(
+    ProductContext
+  ) as ProductContextType;
 
-
-  const [dataSource, setDataSource] = useState<DataType[]>([
+  const columns: ColumnsType<any> = [
     {
-      key: '0',
-      name: 'Edward King 0',
-      age: '32',
-      address: 'London, Park Lane no. 0',
+      title: "STT",
+      key: "index",
+      render: (_: any, __: any, index: number) => index + 1,
+      width: '5%'
     },
     {
-      key: '1',
-      name: 'Edward King 1',
-      age: '32',
-      address: 'London, Park Lane no. 1',
-    },
-  ]);
-
-  const [count, setCount] = useState(2);
-
-  const handleDelete = (key: React.Key) => {
-    const newData = dataSource.filter((item) => item.key !== key);
-    setDataSource(newData);
-  };
-
-  const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
-    {
-      title: 'name',
-      dataIndex: 'name',
-      width: '30%',
-      editable: true,
+      title: "Title",
+      dataIndex: "title",
+      key: "title",
+      width: '25%'
     },
     {
-      title: 'age',
-      dataIndex: 'age',
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+      width: '15%'
     },
     {
-      title: 'address',
-      dataIndex: 'address',
+      title: "Description",
+      dataIndex: "description",
+      key: "description",
     },
     {
-      title: 'operation',
-      dataIndex: 'operation',
-      render: (_, record) =>
-        dataSource.length >= 1 ? (
-            <Popconfirm onConfirm={() => handleDelete(record.key)}
+      title: "Action",
+      key: "action",
+      width: '20%',
+      render: (_: any, record: any) => (
+        <Space size="middle">
+          <Link to={`/admin/edit/${record._id}`}>
+            <Button
+              type="primary"
+              style={{ backgroundColor: "#ffffff", color: '#fa8c16', borderColor: "#fa8c16" }}
+              icon={<ToolOutlined />}
+            >
+              Edit
+            </Button>
+          </Link>
+          <Popconfirm
+            onConfirm={() => removeProduct(record._id)}
             title="Delete the task"
-            description="Are you sure to delete this task?"
-            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+            description="Are you sure to delete this product?"
+            icon={<QuestionCircleOutlined style={{ color: "red" }} />}
           >
-            <Button danger>Delete</Button>
+            <Button danger icon={<DeleteOutlined />}>Delete</Button>
           </Popconfirm>
-        ) : null,
+        </Space>
+      ),
     },
   ];
-
-  const handleAdd = () => {
-    const newData: DataType = {
-      key: count,
-      name: `Edward King ${count}`,
-      age: '32',
-      address: `London, Park Lane no. ${count}`,
-    };
-    setDataSource([...dataSource, newData]);
-    setCount(count + 1);
-  };
-
-  const handleSave = (row: DataType) => {
-    const newData = [...dataSource];
-    const index = newData.findIndex((item) => row.key === item.key);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row,
-    });
-    setDataSource(newData);
-  };
-
-  const components = {
-    body: {
-      row: EditableRow,
-      cell: EditableCell,
-    },
-  };
-
-  const columns = defaultColumns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
-    return {
-      ...col,
-      onCell: (record: DataType) => ({
-        record,
-        editable: col.editable,
-        dataIndex: col.dataIndex,
-        title: col.title,
-        handleSave,
-      }),
-    };
-  });
 
   return (
     <div>
@@ -218,12 +173,11 @@ const ProductList: React.FC = () => {
        Add a row
       </Button>
       <Table
-      
-        components={components}
-        rowClassName={() => 'editable-row'}
+        columns={columns}
+        dataSource={state.products}
+        rowKey="_id"
         bordered
-        dataSource={dataSource}
-        columns={columns as ColumnTypes}
+        className="table table-bodered table-striped text-center"
       />
     </div>
   );
