@@ -2,6 +2,9 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import type { GetRef, InputRef } from 'antd';
 import { Button, Form, Input, Popconfirm, Table } from 'antd';
 import { AiFillPlusCircle } from "react-icons/ai"
+import { useQuery } from '@tanstack/react-query';
+import instance from '../../../api';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 type FormInstance<T> = GetRef<typeof Form<T>>;
 
@@ -110,6 +113,9 @@ interface DataType {
 type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
 
 const ProductList: React.FC = () => {
+ 
+
+
   const [dataSource, setDataSource] = useState<DataType[]>([
     {
       key: '0',
@@ -152,8 +158,12 @@ const ProductList: React.FC = () => {
       dataIndex: 'operation',
       render: (_, record) =>
         dataSource.length >= 1 ? (
-          <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
-            <a>Delete</a>
+            <Popconfirm onConfirm={() => handleDelete(record.key)}
+            title="Delete the task"
+            description="Are you sure to delete this task?"
+            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+          >
+            <Button danger>Delete</Button>
           </Popconfirm>
         ) : null,
     },

@@ -40,11 +40,11 @@ const items: MenuItem[] = [
     getItem(<NavLink to="/admin/products">Danh sách </NavLink>,2-1,<UnorderedListOutlined />),
     getItem(<NavLink to="/admin/products/add">Thêm mới</NavLink>,2-2,<AppstoreAddOutlined />),
   ]),
-  getItem('Statistical', 'sub2', <PieChartOutlined  />),
-  getItem('Logout', '9', <PoweroffOutlined />),
+  getItem('Thống kê', 'sub2', <PieChartOutlined  />),
+  getItem('Đăng xuất', '9', <PoweroffOutlined />),
 ];
 
-const LayOutAdmin: React.FC = () => {
+const LayoutAdmin: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -82,4 +82,4 @@ const LayOutAdmin: React.FC = () => {
   );
 };
 
-export default LayOutAdmin;
+export default LayoutAdmin;
