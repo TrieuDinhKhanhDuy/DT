@@ -5,6 +5,9 @@ import Dashboard from "../pages/admin/dashboard/Dashboard";
 import LayoutAdmin from "../pages/admin/layout";
 import Home from "../pages/client/Home/Home";
 import LayoutWebsite from "../pages/client/layout";
+import ProductForm from "../pages/admin/products/ProductForm";
+import Checkout from "../components/Checkout";
+import AuthForm from "../components/AuthForm";
 
 const Router = () => {
     return (
@@ -14,11 +17,18 @@ const Router = () => {
                     <Route index element={<Home />} />
                     {/* <Route path="cart" element={<CartPage />} /> */}
                 </Route>
+                <Route path="checkout" element={<Checkout />} />
+                <Route path="/login" element={<AuthForm isLogin />} />
+				<Route path="/register" element={<AuthForm />} />
+
+
+
+
                 <Route path="admin" element={<LayoutAdmin />}>
                     <Route index element={<Dashboard />} />
                     <Route path="products" element={<ProductList />} />
-                    <Route path="products/add" element={<ProductAddPage />} />
-                    <Route path="products/:id/edit" element={<ProductEditPage />} />
+                    <Route path="products/add" element={<ProductForm />} />
+                    <Route path="products/edit/:id" element={<ProductForm />} />
                 </Route>
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>

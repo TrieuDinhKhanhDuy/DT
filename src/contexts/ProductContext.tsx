@@ -1,19 +1,18 @@
 import { createContext, useEffect, useReducer } from "react";
+
+import productReducer from "../reducers/productReducer";
 import instance from "../api";
 import { useNavigate } from "react-router-dom";
 import { Product } from "../interfaces/Products";
-import productReducer from "../reducers/productReducer";
-import { message } from "antd";
 
 export type ProductContextType = {
 	state: { products: Product[] };
 	dispatch: React.Dispatch<any>;
-	removeProduct: (_id: string | undefined) => void;
+	removeProduct: (id: string | undefined) => void;
 	handleProduct: (data: Product) => void;
 };
 
 export const ProductContext = createContext({} as ProductContextType);
-
 
 const ProductProvider = ({ children }: { children: React.ReactNode }) => {
 	const [state, dispatch] = useReducer(productReducer, { products: [] });
@@ -26,10 +25,10 @@ const ProductProvider = ({ children }: { children: React.ReactNode }) => {
 		})();
 	}, []);
 
-	const removeProduct = async (_id: string | undefined) => {
+	const removeProduct = async (id: string | undefined) => {
 		try {
-			await instance.delete(`/products/${_id}`);
-			dispatch({ type: "REMOVE_PRODUCT", payload: _id });
+			await instance.delete(`/products/${id}`);
+			dispatch({ type: "REMOVE_PRODUCT", payload: id });
 		} catch (error: any) {
 			console.log(error);
 		}
@@ -47,8 +46,7 @@ const ProductProvider = ({ children }: { children: React.ReactNode }) => {
 				dispatch({ type: "ADD_PRODUCT", payload: data.data });
 				alert(data.message);
 			}
-
-			nav("/admin/products");
+			nav("/admin");
 		} catch (error) {
 			console.log(error);
 		}

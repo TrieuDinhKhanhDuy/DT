@@ -1,7 +1,10 @@
-import { QuestionCircleOutlined  } from '@ant-design/icons';
+import { DeleteOutlined, QuestionCircleOutlined, ToolOutlined  } from '@ant-design/icons';
 import type { GetRef, InputRef } from 'antd';
-import { Button, Form, Input, Popconfirm, Table } from 'antd';
+import { Button, Form, Input, Popconfirm, Space, Table } from 'antd';
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import { ProductContext, ProductContextType } from '../../../contexts/ProductContext';
+import { ColumnsType } from 'antd/es/table';
+import { Link } from 'react-router-dom';
 
 
 type FormInstance<T> = GetRef<typeof Form<T>>;
@@ -145,7 +148,7 @@ const ProductList: React.FC = () => {
       width: '20%',
       render: (_: any, record: any) => (
         <Space size="middle">
-          <Link to={`/admin/edit/${record._id}`}>
+          <Link to={`admin/products/${record._id}`}>
             <Button
               type="primary"
               style={{ backgroundColor: "#ffffff", color: '#fa8c16', borderColor: "#fa8c16" }}
@@ -169,7 +172,7 @@ const ProductList: React.FC = () => {
 
   return (
     <div>
-      <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
+      <Button  type="primary" style={{ marginBottom: 16 }}>
        Add a row
       </Button>
       <Table
