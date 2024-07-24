@@ -25,6 +25,7 @@ const Home = (props: Props) => {
           <PlusCircleOutlined />
           Click Me!
         </Button>
+        <h1 className="text-white">Hello các ban</h1>
         </div>
       ))}
     </div>
