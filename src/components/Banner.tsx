@@ -1,7 +1,24 @@
 import React from 'react';
-import { MdKeyboardArrowRight } from "react-icons/md";
+import { useLocation } from 'react-router-dom';
+import { MdKeyboardArrowRight } from 'react-icons/md';
 
 const Banner = () => {
+  const location = useLocation();
+  const path = location.pathname;
+
+  // Xác định tiêu đề dựa trên đường dẫn hiện tại
+  let title = 'Shop';
+  let subtitle = '';
+
+  if (path === '/') {
+    title = 'Home';
+    subtitle = 'Welcome to our store!';
+  } else if (path === '/checkout') {
+    title = 'Check out';
+    subtitle = 'Payment orders';
+  }
+  // Thêm các điều kiện khác nếu cần thiết
+
   return (
     <div className='relative w-full'>
       <img
@@ -11,14 +28,14 @@ const Banner = () => {
       />
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="text-center">
-          <h3 className='text-5xl font-semibold mb-3'>Shop</h3>
-          <span className='flex items-center justify-center font-bold justify-between'>
-            Home <MdKeyboardArrowRight className='text-2xl'/> Shop
+          <h3 className='text-5xl font-semibold mb-3'>{title}</h3>
+          <span className='flex items-center justify-center font-bold'>
+            {subtitle} <MdKeyboardArrowRight className='text-2xl' /> {title}
           </span>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Banner;

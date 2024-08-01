@@ -1,10 +1,10 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import React, { createContext, ReactNode, useContext, useState, useEffect } from "react";
 
 type ShoppingContextProps = {
   children: ReactNode;
 };
 
-type cartItem = {
+type CartItem = {
   id: number;
   name: string;
   price: number;
@@ -22,7 +22,7 @@ type ProductItem = {
 interface ShoppingContextType {
   cartQty: number;
   totalPrice: number;
-  cartItems: cartItem[]; // Đổi từ cartItem thành cartItems
+  cartItems: CartItem[];
   increaseQty: (id: number) => void;
   decreaseQty: (id: number) => void;
   addCartItem: (item: ProductItem) => void;
@@ -39,64 +39,46 @@ export const useShoppingContext = () => {
 };
 
 export const ShoppingContextProvider = ({ children }: ShoppingContextProps) => {
-  const [cartItems, setCartItems] = useState<cartItem[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+    const savedCart = localStorage.getItem("cart");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cartItems));
+  }, [cartItems]);
+
   const cartQty = cartItems.reduce((qty, item) => qty + item.qty, 0);
   const totalPrice = cartItems.reduce(
     (total, item) => total + item.qty * item.price,
     0
   );
-  
+
   const increaseQty = (id: number) => {
-    console.log(id);
-    const currentCartItem = cartItems.find((item) => item.id === id);
-    if (currentCartItem) {
-      const newItems = cartItems.map((item) => {
-        if (item.id === id) {
-          return { ...item, qty: item.qty + 1 };
-        } else {
-          return item;
-        }
-      });
-      setCartItems(newItems);
-    }
+    const newItems = cartItems.map((item) => 
+      item.id === id ? { ...item, qty: item.qty + 1 } : item
+    );
+    setCartItems(newItems);
   };
 
   const decreaseQty = (id: number) => {
-    console.log(id);
-    const currentCartItem = cartItems.find((item) => item.id === id);
-    if (currentCartItem) {
-      if (currentCartItem.qty === 1) {
-        removeCartItem(id);
-      }
-      const newItems = cartItems.map((item) => {
-        if (item.id === id) {
-          return { ...item, qty: item.qty - 1 };
-        } else {
-          return item;
-        }
-      });
-      setCartItems(newItems);
-    }
+    const newItems = cartItems.map((item) => 
+      item.id === id && item.qty > 1 ? { ...item, qty: item.qty - 1 } : item
+    );
+    setCartItems(newItems);
   };
 
   const addCartItem = (product: ProductItem) => {
-    if (product) {
-      const currentCartItem = cartItems.find((item) => item.id === product.id);
-      if (currentCartItem) {
-        const newItems = cartItems.map((item) => {
-          if (item.id === product.id) {
-            return { ...item, qty: item.qty + 1 };
-          } else {
-            return item;
-          }
-        });
-        setCartItems(newItems);
-      } else {
-        const newItems = { ...product, qty: 1 };
-        setCartItems([...cartItems, newItems]);
-      }
+    const currentCartItem = cartItems.find((item) => item.id === product.id);
+    if (currentCartItem) {
+      const newItems = cartItems.map((item) => 
+        item.id === product.id ? { ...item, qty: item.qty + 1 } : item
+      );
+      setCartItems(newItems);
+    } else {
+      const newItem = { ...product, qty: 1 };
+      setCartItems([...cartItems, newItem]);
     }
-    console.log(product);
   };
 
   const clearCart = () => {
@@ -104,16 +86,14 @@ export const ShoppingContextProvider = ({ children }: ShoppingContextProps) => {
   };
 
   const removeCartItem = (id: number) => {
-    const currentCartItemIndex = cartItems.findIndex((item) => item.id === id);
-    const newItems = [...cartItems];
-    newItems.splice(currentCartItemIndex, 1);
+    const newItems = cartItems.filter((item) => item.id !== id);
     setCartItems(newItems);
   };
 
   return (
     <ShoppingContext.Provider
       value={{
-        cartItems,  // Đổi từ cartItem thành cartItems
+        cartItems,
         cartQty,
         totalPrice,
         increaseQty,

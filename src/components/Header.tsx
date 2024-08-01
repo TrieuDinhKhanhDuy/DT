@@ -1,18 +1,27 @@
 import React, { useState } from "react";
 import { FaRegUser } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
-import { CiHeart } from "react-icons/ci";
 import { BsCart2 } from "react-icons/bs";
-import { useShoppingContext } from "../contexts/ShoppingContext";
 import { TiTrash } from "react-icons/ti";
+import { useShoppingContext } from "../contexts/ShoppingContext";
+import { MdOutlineLogin } from "react-icons/md";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleCart = () => {
     setIsOpen(!isOpen);
   };
 
-  const { cartQty, cartItems, totalPrice,removeCartItem } = useShoppingContext();
+  const { cartQty, cartItems, totalPrice, removeCartItem } = useShoppingContext();
+  const { logout } = useAuth()
+
+  const handleCheckout = () => {
+    navigate('/checkout');
+  };
 
   return (
     <div className="w-full">
@@ -29,7 +38,9 @@ const Header = () => {
 
         {/* Center Section */}
         <ul className="flex justify-center flex-1">
+          <NavLink to={"/"}>
           <li className="px-14 py-2">Home</li>
+          </NavLink>
           <li className="px-14 py-2">Shop</li>
           <li className="px-14 py-2">About</li>
           <li className="px-14 py-2">Contact</li>
@@ -37,9 +48,7 @@ const Header = () => {
 
         {/* Right Section */}
         <div className="flex-1 flex justify-end items-center">
-          <FaRegUser className="mr-4 text-xl" />
-          <CiSearch className="mr-4 text-xl" />
-          <CiHeart className="mr-4 text-xl" />
+          <NavLink to={"/register"}><FaRegUser className="mr-4 text-xl" /></NavLink>
           <div className="relative">
             <div className="cursor-pointer" onClick={toggleCart}>
               <BsCart2 className="mr-4 text-2xl" />
@@ -49,47 +58,56 @@ const Header = () => {
             </div>
 
             {isOpen && (
-             <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-             <table className="w-full text-sm text-left text-gray-700">
-               <thead className="bg-gray-100 border-b border-gray-300">
-                 <tr>
-                   <th className="p-2">Image</th>
-                   <th className="p-2">Name</th>
-                   <th className="p-2">Price</th>
-                   <th className="p-2">Qty</th>
-                   <th className="p-2"></th>
-                 </tr>
-               </thead>
-               <tbody className="w-full text-sm text-left text-gray-700">
-                 {cartItems.map((item) => (
-                   <tr key={item.id} className="w-full">
-                     <td className="p-2">
-                       <img src={item.image} alt={item.name} className="w-8 h-8 rounded-full" />
-                     </td>
-                     <td className="p-2">{item.name}</td>
-                     <td className="p-2 text-green-500">${item.price}</td>
-                     <td className="p-2">{item.qty}</td>
-                     <td className="p-2 text-xl text-red-500">
-                       <button onClick={() => removeCartItem(item.id)}>
-                         <TiTrash />
-                       </button>
-                     </td>
-                   </tr>
-                 ))}
-                 <tr>
-                   <td colSpan="5" className="p-2 border-t border-gray-300">
-                     <div className="flex justify-between font-semibold">
-                       <span className="text-md">Total:</span>
-                       <span className="text-red-500">${totalPrice}</span>
-                     </div>
-                   </td>
-                 </tr>
-               </tbody>
-             </table>
-           </div>
-           
+              <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                <table className="w-full text-sm text-left text-gray-700">
+                  <thead className="bg-gray-100 border-b border-gray-300">
+                    <tr>
+                      <th className="p-2">Image</th>
+                      <th className="p-2">Name</th>
+                      <th className="p-2">Price</th>
+                      <th className="p-2">Qty</th>
+                      <th className="p-2"></th>
+                    </tr>
+                  </thead>
+                  <tbody className="w-full text-sm text-left text-gray-700">
+                    {cartItems.map((item) => (
+                      <tr key={item.id} className="w-full">
+                        <td className="p-2">
+                          <img src={item.image} alt={item.name} className="w-8 h-8 rounded-full" />
+                        </td>
+                        <td className="p-2">{item.name}</td>
+                        <td className="p-2 text-green-500">${item.price}</td>
+                        <td className="p-2">{item.qty}</td>
+                        <td className="p-2 text-xl text-red-500">
+                          <button onClick={() => removeCartItem(item.id)}>
+                            <TiTrash />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                    <tr>
+                      <td colSpan={5} className="p-2 border-t border-gray-300">
+                        <div className="flex justify-between font-semibold">
+                          <span className="text-md">Total:</span>
+                          <span className="text-red-500">${totalPrice.toFixed(2)}</span>
+                        </div>
+                        {/* Show Checkout Button Only if Cart is Not Empty */}
+                        {cartItems.length > 0 && (
+                          <button 
+                            onClick={handleCheckout}
+                            className="mt-2 w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                          >
+                            Checkout
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
+        <button onClick={() => logout()}  ><MdOutlineLogin  className="mr-4 text-xl"/></button>
         </div>
       </div>
     </div>

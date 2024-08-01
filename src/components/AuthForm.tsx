@@ -42,7 +42,7 @@ const AuthForm = ({ isLogin }: Props) => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-lg">
         <div className="bg-white shadow-md rounded px-14 pt-6 pb-8 mb-4 ">
-          <IoIosCloseCircle className="text-xl flex ml-auto" />
+          <Link to={"/"}><IoIosCloseCircle className="text-xl flex ml-auto" /></Link>
           <h1
             className="text-center text-2xl font-bold mb-4"
             style={{ color: "#B88E2F" }}
