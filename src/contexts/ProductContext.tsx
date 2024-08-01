@@ -6,57 +6,66 @@ import { useNavigate } from "react-router-dom";
 import { Product } from "../interfaces/Products";
 
 export type ProductContextType = {
-	state: { products: Product[] };
-	dispatch: React.Dispatch<any>;
-	removeProduct: (id: string | undefined) => void;
-	handleProduct: (data: Product) => void;
+   state: { products: Product[] };
+   dispatch: React.Dispatch<any>;
+   removeProduct: (id: string | undefined) => void;
+   handleProduct: (data: Product) => void;
 };
 
 export const ProductContext = createContext({} as ProductContextType);
 
 const ProductProvider = ({ children }: { children: React.ReactNode }) => {
-	const [state, dispatch] = useReducer(productReducer, { products: [] });
-	const nav = useNavigate();
-	useEffect(() => {
-		(async () => {
-			const { data } = await instance.get(`/products`);
-			console.log(data);
-			dispatch({ type: "GET_PRODUCTS", payload: data.data });
-		})();
-	}, []);
+   const [state, dispatch] = useReducer(productReducer, { products: [] });
+   const nav = useNavigate();
 
-	const removeProduct = async (id: string | undefined) => {
-		try {
-			await instance.delete(`/products/${id}`);
-			dispatch({ type: "REMOVE_PRODUCT", payload: id });
-		} catch (error: any) {
-			console.log(error);
-		}
-	};
+   useEffect(() => {
+      (async () => {
+         try {
+            const { data } = await instance.get(`/products`);
+            dispatch({ type: "GET_PRODUCTS", payload: data.data });
+         } catch (error) {
+            console.error("Failed to fetch products:", error);
+         }
+      })();
+   }, [])
+   
 
-	const handleProduct = async (product: Product) => {
-		try {
-			if (product._id) {
-				const { data } = await instance.patch(`/products/${product._id}`, product);
-				dispatch({ type: "UPDATE_PRODUCT", payload: data.data });
-				alert(data.message);
-			} else {
-				console.log(product);
-				const { data } = await instance.post(`/products`, product);
-				dispatch({ type: "ADD_PRODUCT", payload: data.data });
-				alert(data.message);
-			}
-			nav("/admin");
-		} catch (error) {
-			console.log(error);
-		}
-	};
+   const removeProduct = async (id: string | undefined) => {
+      try {
+         await instance.delete(`/products/${id}`);
+         dispatch({ type: "REMOVE_PRODUCT", payload: id });
+      } catch (error) {
+         console.log(error);
+      }
+   };
 
-	return (
-		<ProductContext.Provider value={{ state, dispatch, removeProduct, handleProduct }}>
-			{children}
-		</ProductContext.Provider>
-	);
+   const handleProduct = async (product: Product) => {
+      try {
+         if (product._id) {
+            const { data } = await instance.patch(
+               `/products/${product._id}`,
+               product
+            );
+            dispatch({ type: "UPDATE_PRODUCT", payload: data.data });
+            alert(data.message);
+         } else {
+            const { data } = await instance.post(`/products`, product);
+            dispatch({ type: "ADD_PRODUCT", payload: data.data });
+            alert(data.message);
+         }
+         nav("/admin");
+      } catch (error) {
+         console.log(error);
+      }
+   };
+
+   return (
+      <ProductContext.Provider
+         value={{ state, dispatch, removeProduct, handleProduct }}
+      >
+         {children}
+      </ProductContext.Provider>
+   );
 };
 
 export default ProductProvider;
