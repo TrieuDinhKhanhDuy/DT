@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import instance from "../api";
 import { useAuth } from "../contexts/AuthContext";
 import { User } from "../interfaces/User";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoIosCloseCircle } from "react-icons/io";
 import { loginSchema, registerSchema } from "../ultis/validation";
 
@@ -12,11 +12,13 @@ type Props = {
 };
 
 const AuthForm = ({ isLogin }: Props) => {
+  const navigate = useNavigate()
   const { login: contextLogin } = useAuth();
   const {
     handleSubmit,
     formState: { errors },
     register,
+    watch,
   } = useForm<User>({
     resolver: zodResolver(isLogin ? loginSchema : registerSchema),
   });
@@ -24,25 +26,33 @@ const AuthForm = ({ isLogin }: Props) => {
   const onSubmit = async (data: User) => {
     try {
       if (isLogin) {
-        const res = await instance.post(`/auth/login`, data);
+        const res = await instance.post(`/login`, data);
         contextLogin(res.data.accessToken, res.data.user);
       } else {
-        const res = await instance.post(`/auth/register`, {
+        const res = await instance.post(`/register`, {
           email: data.email,
           password: data.password,
         });
-        alert(res.data.message);
+       alert("đăng ký thành công")
+       navigate("/login")
       }
     } catch (error: any) {
-      console.log(error);
+      console.error(error);
       alert(error.response?.data?.message || "Error!");
     }
   };
+
+  // Lấy giá trị của mật khẩu và mật khẩu xác nhận để so sánh
+  const password = watch("password");
+  const confirmPassword = watch("confirmPass");
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-lg">
-        <div className="bg-white shadow-md rounded px-14 pt-6 pb-8 mb-4 ">
-          <IoIosCloseCircle className="text-xl flex ml-auto" />
+        <div className="bg-white shadow-md rounded px-14 pt-6 pb-8 mb-4">
+          <Link to={"/"}>
+            <IoIosCloseCircle className="text-xl flex ml-auto" />
+          </Link>
           <h1
             className="text-center text-2xl font-bold mb-4"
             style={{ color: "#B88E2F" }}
@@ -94,14 +104,17 @@ const AuthForm = ({ isLogin }: Props) => {
                 <label
                   htmlFor="confirmPass"
                   className="block text-yellow-700 text-sm font-bold mb-2"
+                  style={{ color: "#B88E2F" }}
                 >
                   Confirm Password
                 </label>
                 <input
                   type="password"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="border border-black border-[1px] rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   {...register("confirmPass", {
                     required: "Confirm Password is required",
+                    validate: value =>
+                      value === password || "Passwords do not match",
                   })}
                 />
                 {errors.confirmPass && (
@@ -137,23 +150,17 @@ const AuthForm = ({ isLogin }: Props) => {
           </div>
           <div className="flex justify-center mt-4">
             {isLogin ? (
-              <Link
-                to="/register"
-                className="text-white-500 hover:underline w-[70px]"
-              >
+              <Link to="/register" className="text-white-500 hover:underline w-[70px]">
                 <button className="bg-yellow-400 text-white hover:bg-yellow-500 hover:text-black px-3 py-2 rounded-lg">
                   Register
                 </button>
               </Link>
             ) : (
-				<Link
-				to="/login"
-				className="text-white-500 hover:underline"
-			  >
-				<button className="bg-yellow-400 text-white hover:bg-yellow-500 hover:text-black px-[18px] py-2 rounded-lg">
-				  Login
-				</button>
-			  </Link>
+              <Link to="/login" className="text-white-500 hover:underline">
+                <button className="bg-yellow-400 text-white hover:bg-yellow-500 hover:text-black px-[18px] py-2 rounded-lg">
+                  Login
+                </button>
+              </Link>
             )}
           </div>
         </div>

@@ -41,9 +41,9 @@ const ProductProvider = ({ children }: { children: React.ReactNode }) => {
 
    const handleProduct = async (product: Product) => {
       try {
-         if (product._id) {
+         if (product.id) {
             const { data } = await instance.patch(
-               `/products/${product._id}`,
+               `/products/${product.id}`,
                product
             );
             dispatch({ type: "UPDATE_PRODUCT", payload: data.data });

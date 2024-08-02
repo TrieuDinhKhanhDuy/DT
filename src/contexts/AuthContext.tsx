@@ -30,6 +30,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 	}, []);
 
+
 	const login = (token: string, user: User) => {
 		localStorage.setItem("accessToken", token);
 		localStorage.setItem("user", JSON.stringify(user));
@@ -41,7 +42,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		localStorage.removeItem("accessToken");
 		localStorage.removeItem("user");
 		setUser(null);
-		nav("/login");
+		
 	};
 	return (
 		<AuthContext.Provider value={{ user, login, logout, isAdmin: user?.role === "admin" }}>
