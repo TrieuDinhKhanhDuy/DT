@@ -60,7 +60,7 @@ const Header = () => {
                    <th className="p-2"></th>
                  </tr>
                </thead>
-               <tbody className="w-full text-sm text-left text-gray-700">
+               <tbody className="text-sm text-left text-gray-700 text-center" style={{width:'100%', background:"white"}}>
                  {cartItems.map((item) => (
                    <tr key={item.id} className="w-full">
                      <td className="p-2">
