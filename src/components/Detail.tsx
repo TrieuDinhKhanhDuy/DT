@@ -53,7 +53,7 @@ const Detail: React.FC = () => {
 
   const handleAddToCart = () => {
     if (product) {
-      addCartItem(product);
+      addCartItem({ ...product, qty: quantity });
       openMessage();
     }
   };

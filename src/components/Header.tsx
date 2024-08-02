@@ -65,7 +65,7 @@
                 {isOpen && (
                   <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                     <table className="w-full text-sm text-left text-gray-700">
-                      <thead className="bg-gray-100 border-b border-gray-300">
+                      <thead className="bg-gray-500 border-b border-gray-300">
                         <tr>
                           <th className="p-2">Image</th>
                           <th className="p-2">Name</th>
@@ -74,16 +74,16 @@
                           <th className="p-2"></th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className="w-full bg-gray-300">
                         {cartItems.map((item) => (
-                          <tr key={item.id}>
+                          <tr key={item.id} className="">
                             <td className="p-2">
                               <img src={item.image} alt={item.name} className="w-8 h-8 rounded-full" />
                             </td>
                             <td className="p-2">{item.name}</td>
-                            <td className="p-2 text-green-500">${item.price}</td>
-                            <td className="p-2">{item.qty}</td>
-                            <td className="p-2 text-xl text-red-500">
+                            <td className="p-2 text-green-700 font-bold">${item.price}</td>
+                            <td className="p-2 font-bold">{item.qty}</td>
+                            <td className="p-2 text-xl text-red-700 font-bold">
                               <button onClick={() => removeCartItem(item.id)}>
                                 <TiTrash />
                               </button>

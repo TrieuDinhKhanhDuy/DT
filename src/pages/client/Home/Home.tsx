@@ -42,14 +42,14 @@ const Home = (props: Props) => {
   }, []);
 
   const handleAddToCart = (item: Product) => {
-    addCartItem(item);
-    openMessage('Thêm giỏ hàng thành công!');
+    addCartItem({ ...item, qty: 1 });
+    openMessage('Thêm vào giỏ hàng thành công!');
   };
 
   return (
     <>
       {contextHolder}
-      <div className="w-full h-64 bg-cover bg-center mb-8" style={{ backgroundImage: "url('/path/to/your/banner/image.jpg')" }}>
+      <div className="w-full bg-cover bg-center mb-8" style={{ backgroundImage: "url('/path/to/your/banner/image.jpg')" }}>
         {/* Nội dung banner nếu có */}
       </div>
       <div className="mx-4 sm:mx-8 md:mx-16 mt-9">
