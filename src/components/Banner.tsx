@@ -1,12 +1,12 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { MdKeyboardArrowRight } from 'react-icons/md';
 
 const Banner = () => {
   const location = useLocation();
   const path = location.pathname;
-
-  // Xác định tiêu đề dựa trên đường dẫn hiện tại
+  const {id} = useParams()
+  
   let title = 'Shop';
   let subtitle = '';
 
@@ -15,9 +15,10 @@ const Banner = () => {
     subtitle = 'Welcome to our store!';
   } else if (path === '/checkout') {
     title = 'Check out';
-    subtitle = 'Payment orders';
+    subtitle = 'Payment orders`';
+  } else if (path === `product/${id}`) {
+    title 
   }
-  // Thêm các điều kiện khác nếu cần thiết
 
   return (
     <div className='relative w-full'>

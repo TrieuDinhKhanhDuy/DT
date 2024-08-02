@@ -24,10 +24,10 @@ const AuthForm = ({ isLogin }: Props) => {
   const onSubmit = async (data: User) => {
     try {
       if (isLogin) {
-        const res = await instance.post(`/auth/login`, data);
+        const res = await instance.post(`/users/login`, data);
         contextLogin(res.data.accessToken, res.data.user);
       } else {
-        const res = await instance.post(`/auth/register`, {
+        const res = await instance.post(`/users/register`, {
           email: data.email,
           password: data.password,
         });

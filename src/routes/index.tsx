@@ -8,6 +8,7 @@ import LayoutWebsite from "../pages/client/layout";
 import ProductForm from "../pages/admin/products/ProductForm";
 import Checkout from "../components/Checkout";
 import AuthForm from "../components/AuthForm";
+import Detail from "../components/Detail";
 
 const Router = () => {
     return (
@@ -17,7 +18,8 @@ const Router = () => {
                     <Route index element={<Home />} />
                     {/* <Route path="cart" element={<CartPage />} /> */}
                 </Route>
-                <Route path="checkout" element={<Checkout />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/product/:id" element={<Detail />} />
                 <Route path="/login" element={<AuthForm isLogin />} />
 				<Route path="/register" element={<AuthForm />} />
 
