@@ -11,7 +11,7 @@ import { message } from "antd";
 
 const Detail: React.FC = () => {
   const [quantity, setQuantity] = useState<number>(1);
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams();
   const [product, setProduct] = useState<Product | undefined>();
   const { addCartItem } = useShoppingContext();
   const [messageApi, contextHolder] = message.useMessage();
@@ -27,7 +27,7 @@ const Detail: React.FC = () => {
       messageApi.open({
         key,
         type: "success",
-        content: "Thêm vào giỏ hàng thành công!",
+        content: "Thêm giỏ hàng thành công!",
         duration: 2,
       });
     }, 700);
@@ -47,14 +47,13 @@ const Detail: React.FC = () => {
   };
 
   useEffect(() => {
-    if (id) {
-      getProduct(id);
-    }
+    if (!id) return;
+    getProduct(id);
   }, [id]);
 
   const handleAddToCart = () => {
     if (product) {
-      addCartItem({ ...product, qty: quantity });
+      addCartItem(product);
       openMessage();
     }
   };
@@ -65,15 +64,14 @@ const Detail: React.FC = () => {
       <Header />
       <div className="relative w-full">
         <div
-          className="w-full object-cover h-60 opacity-50"
+          className="w-full h-60 bg-cover bg-opacity-50"
           style={{ backgroundColor: "#f9f1e7" }}
         >
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <h3 className="text-5xl font-semibold mb-3">Shop</h3>
               <span className="flex items-center justify-center font-bold">
-                Home <MdKeyboardArrowRight className="text-2xl" />{" "}
-                {product?.name}
+                Home <MdKeyboardArrowRight className="text-2xl" /> {product?.name}
               </span>
             </div>
           </div>
@@ -82,13 +80,11 @@ const Detail: React.FC = () => {
       <div className="p-8">
         <div className="flex flex-col lg:flex-row">
           <div className="flex-1">
-            <img src={product?.image} alt={product?.name} width={500} />
+            <img src={product?.image} alt={product?.name} width={500} className="mx-auto lg:mx-0" />
           </div>
           {product && (
-            <div className="flex-1 lg:pl-8">
-              <h1 className="text-4xl font-bold mt-4 lg:mt-0">
-                {product.name}
-              </h1>
+            <div className="flex-1 lg:pl-8 mt-4 lg:mt-0">
+              <h1 className="text-4xl font-bold">{product.name}</h1>
               <p className="text-2xl text-gray-500 mt-2">${product.price}</p>
               <div className="flex items-center mt-4">
                 <div className="flex items-center text-yellow-500 border-r border-gray-300 pr-2">
@@ -102,24 +98,18 @@ const Detail: React.FC = () => {
                     </svg>
                   ))}
                 </div>
-                <span className="ml-2 text-gray-600">5 Customer Reviews</span>
+                <span className="ml-2 text-gray-600">5 Customer Review</span>
               </div>
               <div className="mt-4">
-                <span className="block text-sm font-medium text-gray-700">
-                  Size
-                </span>
+                <span className="block text-sm font-medium text-gray-700">Size</span>
                 <div className="flex space-x-2 mt-2">
-                  <button className="border rounded bg-size-color px-3 py-1">
-                    L
-                  </button>
+                  <button className="border rounded bg-size-color px-3 py-1">L</button>
                   <button className="border rounded px-3 py-1">XL</button>
                   <button className="border rounded px-3 py-1">XS</button>
                 </div>
               </div>
               <div className="mt-4">
-                <span className="block text-sm font-medium text-gray-700">
-                  Color
-                </span>
+                <span className="block text-sm font-medium text-gray-700">Color</span>
                 <div className="flex space-x-2 mt-2">
                   <button className="w-6 h-6 rounded-full bg-purple-600"></button>
                   <button className="w-6 h-6 rounded-full bg-black"></button>
@@ -147,45 +137,35 @@ const Detail: React.FC = () => {
                 </button>
               </div>
               <button
-                className="mt-4 border border-solid border-black bg-black text-white py-2 px-4 rounded"
+                className="mt-4 border border-solid border-black bg-600 text-black py-2 px-4 rounded"
                 onClick={handleAddToCart}
               >
                 Add To Cart
               </button>
 
               <div className="mt-8">
-                <div className="flex-1">
-                  <div className="mt-4">
-                    <span className="block text-sm font-medium text-gray-700">
-                      SKU
-                    </span>
-                    <p className="text-gray-600">SS001</p>
-                  </div>
-                  <div className="mt-4">
-                    <span className="block text-sm font-medium text-gray-700">
-                      Category
-                    </span>
-                    <p className="text-gray-600">Sofas</p>
-                  </div>
+                <div className="mt-4">
+                  <span className="block text-sm font-medium text-gray-700">SKU</span>
+                  <p className="text-gray-600">SS001</p>
                 </div>
                 <div className="mt-4">
-                  <span className="block text-sm font-medium text-gray-700">
-                    Tags
-                  </span>
+                  <span className="block text-sm font-medium text-gray-700">Category</span>
+                  <p className="text-gray-600">Sofas</p>
+                </div>
+                <div className="mt-4">
+                  <span className="block text-sm font-medium text-gray-700">Tags</span>
                   <p className="text-gray-600">Sofa, Chair, Home, Shop</p>
                 </div>
                 <div className="mt-4">
-                  <span className="block text-sm font-medium text-gray-700">
-                    Share
-                  </span>
+                  <span className="block text-sm font-medium text-gray-700">Share</span>
                   <div className="flex space-x-2 mt-2">
-                    <button className="text-blue-600">
+                    <button className="text-600" aria-label="Share on Facebook">
                       <FaFacebook />
                     </button>
-                    <button className="text-blue-400">
+                    <button className="text-400" aria-label="Share on LinkedIn">
                       <RxLinkedinLogo />
                     </button>
-                    <button className="text-blue-500">
+                    <button className="text-500" aria-label="Share on Twitter">
                       <FaTwitter />
                     </button>
                   </div>
@@ -202,12 +182,12 @@ const Detail: React.FC = () => {
                 </p>
                 <p className="mt-2 text-gray-600">
                   Weighing in under 7 pounds, the Kilburn is a lightweight piece
-                  of vintage-styled engineering. Setting the bar as one of the
+                  of vintage styled engineering. Setting the bar as one of the
                   loudest speakers in its class, the Kilburn is a compact,
-                  stout-hearted hero with a well-balanced audio that boasts a
+                  stout-hearted hero with a well-balanced audio which boasts a
                   clear midrange and extended highs for a sound that is both
                   articulate and pronounced. The analogue knobs allow you to
-                  fine-tune the controls to your personal preferences while the
+                  fine tune the controls to your personal preferences while the
                   guitar-influenced leather strap enables easy and stylish
                   travel.
                 </p>

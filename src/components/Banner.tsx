@@ -5,8 +5,8 @@ import { MdKeyboardArrowRight } from 'react-icons/md';
 const Banner = () => {
   const location = useLocation();
   const path = location.pathname;
-  const {id} = useParams()
-  
+  const { id } = useParams();
+
   let title = 'Shop';
   let subtitle = '';
 
@@ -15,9 +15,9 @@ const Banner = () => {
     subtitle = 'Welcome to our store!';
   } else if (path === '/checkout') {
     title = 'Check out';
-    subtitle = 'Payment orders`';
-  } else if (path === `product/${id}`) {
-    title 
+    subtitle = 'Payment orders';
+  } else if (path === `/product/${id}`) {
+    title = 'Product Details';
   }
 
   return (

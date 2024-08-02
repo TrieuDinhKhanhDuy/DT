@@ -28,7 +28,7 @@ const productReducer = (state: State, action: Action) => {
          return {
             ...state,
             products: state.products.map((product) =>
-               product._id === action.payload._id ? action.payload : product
+               product.id === action.payload._id ? action.payload : product
             ),
          };
 
@@ -36,7 +36,7 @@ const productReducer = (state: State, action: Action) => {
          return {
             ...state,
             products: state.products.filter(
-               (product) => product._id !== action.payload
+               (product) => product.id !== action.payload
             ),
          };
 

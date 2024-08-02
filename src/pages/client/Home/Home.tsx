@@ -9,7 +9,7 @@ import { message } from "antd";
 type Props = {};
 
 const Home = (props: Props) => {
-  const { addCartItem, cartItems } = useShoppingContext();
+  const { addCartItem } = useShoppingContext();
   const [products, setProducts] = useState<Product[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
   const key = 'updatable';
@@ -42,56 +42,47 @@ const Home = (props: Props) => {
   }, []);
 
   const handleAddToCart = (item: Product) => {
-    addCartItem({ ...item, qty: 1 });
-    openMessage('Thêm vào giỏ hàng thành công!');
-  };
-
-  // Tìm số lượng của sản phẩm trong giỏ hàng
-  const getQuantity = (productId: number) => {
-    const item = cartItems.find(item => item.id === productId);
-    return item ? item.qty : 0;
+    addCartItem(item);
+    openMessage('Thêm giỏ hàng thành công!');
   };
 
   return (
     <>
       {contextHolder}
-      <div className="mx-16 mt-9">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-          {products.slice(0, 20).map((item) => (
-            <div
-              key={item.id}
-              className="bg-white p-4 shadow-md flex flex-col justify-between"
-              style={{ background: "#F4F5F7" }}
-            >
-              <div>
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-full h-48 object-contain rounded-lg mb-4"
-                />
-                <Link to={`/product/${item.id}`}>
-                  <h1 className="text-xl font-bold mb-3">{item.name}</h1>
-                </Link>
-              </div>
-              <div className="flex justify-between items-center mt-auto">
-                <p className="font-bold text-red-500 text-lg">
-                  ${Number(item.price).toFixed(2)}
-                </p>
-                <span className="text-2xl flex items-center">
-                  <BsCartCheck
-                    onClick={() => handleAddToCart(item)}
-                    className="cursor-pointer hover:text-green-500"
+      <div className="w-full h-64 bg-cover bg-center mb-8" style={{ backgroundImage: "url('/path/to/your/banner/image.jpg')" }}>
+        {/* Nội dung banner nếu có */}
+      </div>
+      <div className="mx-4 sm:mx-8 md:mx-16 mt-9">
+        <div className="overflow-x-auto">
+          <div className="flex sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            {products.slice(0, 20).map((item) => (
+              <div
+                key={item.id}
+                className="bg-white p-4 shadow-md flex flex-col justify-between"
+                style={{ background: "#F4F5F7", minWidth: '250px' }}
+              >
+                <div>
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="w-full h-48 object-contain rounded-lg mb-4"
                   />
-                  {/* Hiển thị số lượng */}
-                  {getQuantity(item.id) > 0 && (
-                    <span className="ml-2 text-sm text-gray-600">
-                      ({getQuantity(item.id)})
-                    </span>
-                  )}
-                </span>
+                  <Link to={`/product/${item.id}`}>
+                    <h1 className="text-xl font-bold mb-3">{item.name}</h1>
+                  </Link>
+                </div>
+                <div className="flex justify-between items-center mt-auto">
+                  <p className="font-bold text-red-500 text-lg">${item.price}</p>
+                  <span className="text-2xl">
+                    <BsCartCheck
+                      onClick={() => handleAddToCart(item)}
+                      className="cursor-pointer hover:text-green-500"
+                    />
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </>
